@@ -1,44 +1,18 @@
 package br.gov.sp.fatec.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import br.gov.sp.fatec.domain.entity.Cliente;
-import br.gov.sp.fatec.repository.ClienteRepository;
-
+import br.gov.sp.fatec.domain.request.ClienteRequest;
+import br.gov.sp.fatec.domain.request.ClienteUpdateRequest;
+import br.gov.sp.fatec.domain.response.ClienteResponse;
 import java.util.List;
-import java.util.Optional;
 
-@Service
-@Transactional
-public class ClienteService {
+public interface ClienteService {
+    ClienteResponse save(ClienteRequest clienteRequest);
 
-    @Autowired
-    private ClienteRepository clienteRepository;
+    ClienteResponse findById(Long id);
 
-    public Cliente salvarCliente(Cliente cliente) {
-        return clienteRepository.save(cliente);
-    }
+    List<ClienteResponse> findAll();
 
-    @Transactional(readOnly = true)
-    public Optional<Cliente> buscarClientePorId(Long id) {
-        return clienteRepository.findById(id);
-    }
+    void updateById(Long id, ClienteUpdateRequest clienteUpdateRequest);
 
-    @Transactional(readOnly = true)
-    public List<Cliente> buscarTodosClientes() {
-        return clienteRepository.findAll();
-    }
-
-    public Cliente atualizarCliente(Long id, Cliente clienteAtualizado) {
-        clienteAtualizado.setId(id); 
-        return clienteRepository.save(clienteAtualizado);
-    }
-
-    public void deletarCliente(Long id) {
-        clienteRepository.deleteById(id);
-    }
+    void deleteById(Long id);
 }
-
-
