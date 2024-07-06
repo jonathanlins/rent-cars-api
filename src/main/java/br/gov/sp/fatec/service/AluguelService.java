@@ -1,18 +1,42 @@
 package br.gov.sp.fatec.service;
 
-import br.gov.sp.fatec.domain.request.AluguelRequest;
-import br.gov.sp.fatec.domain.request.AluguelUpdateRequest;
-import br.gov.sp.fatec.domain.response.AluguelResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import br.gov.sp.fatec.domain.entity.Aluguel;
+import br.gov.sp.fatec.repository.AluguelRepository;
+
 import java.util.List;
+import java.util.Optional;
 
-public interface AluguelService {
-    AluguelResponse save(AluguelRequest aluguelRequest);
+@Service
+@Transactional
+public class AluguelService {
 
-    AluguelResponse findById(Long id);
+    @Autowired
+    private AluguelRepository aluguelRepository;
 
-    List<AluguelResponse> findAll();
+    public Aluguel criarAluguel(Aluguel aluguel) {
+        return aluguelRepository.save(aluguel);
+    }
 
-    void updateById(Long id, AluguelUpdateRequest aluguelUpdateRequest);
+    public Aluguel atualizarAluguel(Long id, Aluguel aluguelAtualizado) {
+        aluguelAtualizado.setId(id); 
+        return aluguelRepository.save(aluguelAtualizado);
+    }
 
-    void deleteById(Long id);
+    @Transactional(readOnly = true)
+    public Optional<Aluguel> buscarAluguelPorId(Long id) {
+        return aluguelRepository.findById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Aluguel> buscarTodosAlugueis() {
+        return aluguelRepository.findAll();
+    }
+
+    public void finalizarAluguel(Long id) {
+        aluguelRepository.deleteById(id);
+    }
 }

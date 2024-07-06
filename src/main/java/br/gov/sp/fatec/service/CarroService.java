@@ -1,18 +1,42 @@
 package br.gov.sp.fatec.service;
 
-import br.gov.sp.fatec.domain.request.CarroRequest;
-import br.gov.sp.fatec.domain.request.CarroUpdateRequest;
-import br.gov.sp.fatec.domain.response.CarroResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import br.gov.sp.fatec.domain.entity.Carro;
+import br.gov.sp.fatec.repository.CarroRepository;
+
 import java.util.List;
+import java.util.Optional;
 
-public interface CarroService {
-    CarroResponse save(CarroRequest carroRequest);
+@Service
+@Transactional
+public class CarroService {
 
-    CarroResponse findById(Long id);
+    @Autowired
+    private CarroRepository carroRepository;
 
-    List<CarroResponse> findAll();
+    public Carro salvarCarro(Carro carro) {
+        return carroRepository.save(carro);
+    }
 
-    void updateById(Long id, CarroUpdateRequest carroUpdateRequest);
+    @Transactional(readOnly = true)
+    public Optional<Carro> buscarCarroPorId(Long id) {
+        return carroRepository.findById(id);
+    }
 
-    void deleteById(Long id);
+    @Transactional(readOnly = true)
+    public List<Carro> buscarTodosCarros() {
+        return carroRepository.findAll();
+    }
+
+    public Carro atualizarCarro(Long id, Carro carroAtualizado) {
+        carroAtualizado.setId(id); 
+        return carroRepository.save(carroAtualizado);
+    }
+
+    public void deletarCarro(Long id) {
+        carroRepository.deleteById(id);
+    }
 }

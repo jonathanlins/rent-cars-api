@@ -1,7 +1,5 @@
 package br.gov.sp.fatec.domain.enums;
 
 public enum AluguelStatus {
-    PENDENTE,
-    ATIVO,
-    FINALIZADO
+    PENDENTE, ATIVO, FINALIZADO
 }
